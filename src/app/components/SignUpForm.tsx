@@ -6,8 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpParams } from "../types";
 import { signUpSchema } from "../utils/validationSchema";
 import Button from "./Button";
+import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -16,8 +19,23 @@ const SignUpForm = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit = (params: SignUpParams) => {
-    console.log(params);
+  const onSubmit = async (params: SignUpParams) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/register`,
+        {
+          method: "POST",
+          body: JSON.stringify(params),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await res.json();
+      router.push("/login");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const buttonText = "登録する";
