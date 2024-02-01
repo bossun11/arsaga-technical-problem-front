@@ -15,9 +15,8 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     async function fetchUser() {
       setLoading(true);
       try {
-        const response = await getCurrentUser();
-        if (response?.ok) {
-          const user = await response.json();
+        const user = await getCurrentUser();
+        if (user) {
           setCurrentUser(user);
           setIsSignedIn(true);
         } else {

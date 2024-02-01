@@ -33,11 +33,10 @@ const LoginForm = () => {
   const onSubmit = async (params: LoginParams) => {
     try {
       login(params);
-      const response = await getCurrentUser();
-      const user = await response?.json();
+      const user = await getCurrentUser();
       setCurrentUser(user);
       setIsSignedIn(true);
-      router.push("/posts");
+      // router.push("/posts");
     } catch (e) {
       console.log(e);
     }

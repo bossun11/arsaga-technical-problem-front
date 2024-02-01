@@ -1,7 +1,18 @@
 import { LoginParams } from "../types";
-import { setCookie, hasCookie, getCookie } from "cookies-next";
+
+// CSRFトークンを取得する関数を追加
+export const getCsrfCookie = async () => {
+  await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/sanctum/csrf-cookie`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+};
 
 export const login = async (params: LoginParams) => {
+  await getCsrfCookie();
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/login`,
     {
@@ -10,19 +21,31 @@ export const login = async (params: LoginParams) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
     }
   );
+
+  if (!res.ok) {
+    throw new Error("ログインに失敗しました");
+  }
   const data = await res.json();
-  setCookie("token", data.token);
   return data;
 };
 
 export const getCurrentUser = async () => {
-  if (hasCookie("nothing")) return;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/user`,
+    {
+      headers: {
+        Accept: "application/json",
+      },
+      credentials: "include",
+    }
+  );
 
-  return fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/user`, {
-    headers: {
-      Authorization: `Bearer ${getCookie("token")}`,
-    },
-  });
+  if (!res) {
+    throw new Error("ユーザー情報の取得に失敗しました");
+  }
+
+  return await res.json();
 };
