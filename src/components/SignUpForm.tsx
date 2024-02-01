@@ -31,7 +31,7 @@ const SignUpForm = () => {
   const onSubmit = async (params: SignUpParams) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/register`,
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/register`,
         {
           method: "POST",
           body: JSON.stringify(params),
@@ -85,7 +85,7 @@ const SignUpForm = () => {
             <FormItem className="mb-2">
               <FormLabel>パスワード</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

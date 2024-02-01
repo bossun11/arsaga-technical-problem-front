@@ -15,9 +15,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "../app/utils/validationSchema";
 import { LoginParams } from "../app/types";
+import { getCurrentUser, login } from "@/app/api/auth";
+import { useAuthContext } from "@/app/context/AuthContext";
 
 const LoginForm = () => {
   const router = useRouter();
+  const { setCurrentUser, setIsSignedIn } = useAuthContext();
 
   const form = useForm<LoginParams>({
     resolver: zodResolver(loginSchema),
@@ -28,7 +31,16 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (params: LoginParams) => {
-    console.log(params);
+    try {
+      login(params);
+      const response = await getCurrentUser();
+      const user = await response?.json();
+      setCurrentUser(user);
+      setIsSignedIn(true);
+      router.push("/posts");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -55,7 +67,7 @@ const LoginForm = () => {
             <FormItem className="mb-2">
               <FormLabel>パスワード</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
