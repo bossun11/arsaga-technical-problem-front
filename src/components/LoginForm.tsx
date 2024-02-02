@@ -2,8 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignUpParams } from "../app/types";
-import { signUpSchema } from "../app/utils/validationSchema";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import {
@@ -15,33 +13,30 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { loginSchema } from "../app/utils/validationSchema";
+import { LoginParams } from "../app/types";
+import { getCurrentUser, login } from "@/app/api/auth";
+import { useAuthContext } from "@/app/context/AuthContext";
 
-const SignUpForm = () => {
+const LoginForm = () => {
   const router = useRouter();
+  const { setCurrentUser, setIsSignedIn } = useAuthContext();
 
-  const form = useForm<SignUpParams>({
-    resolver: zodResolver(signUpSchema),
+  const form = useForm<LoginParams>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (params: SignUpParams) => {
+  const onSubmit = async (params: LoginParams) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/register`,
-        {
-          method: "POST",
-          body: JSON.stringify(params),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await res.json();
-      router.push("/login");
+      login(params);
+      const user = await getCurrentUser();
+      setCurrentUser(user);
+      setIsSignedIn(true);
+      // router.push("/posts");
     } catch (e) {
       console.log(e);
     }
@@ -50,20 +45,6 @@ const SignUpForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem className="mb-2">
-              <FormLabel>ユーザー名</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="email"
@@ -93,11 +74,11 @@ const SignUpForm = () => {
         />
 
         <div className="flex justify-center">
-          <Button type="submit">登録する</Button>
+          <Button type="submit">ログイン</Button>
         </div>
       </form>
     </Form>
   );
 };
 
-export default SignUpForm;
+export default LoginForm;
