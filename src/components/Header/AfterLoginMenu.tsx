@@ -1,3 +1,5 @@
+import { logout } from "@/app/api/auth";
+import { useAuthContext } from "@/app/context/AuthContext";
 import {
   NavigationMenuItem,
   NavigationMenuLink,
@@ -7,6 +9,18 @@ import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 
 const AfterLoginMenu = () => {
+  const { setIsSignedIn, setCurrentUser } = useAuthContext();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsSignedIn(false);
+      setCurrentUser(null);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <NavigationMenuList className="gap-3 mr-3">
       <NavigationMenuItem>
@@ -25,7 +39,10 @@ const AfterLoginMenu = () => {
       </NavigationMenuItem>
       <NavigationMenuItem>
         <Link href="/signup" legacyBehavior passHref>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+          <NavigationMenuLink
+            className={navigationMenuTriggerStyle()}
+            onClick={handleLogout}
+          >
             ログアウト
           </NavigationMenuLink>
         </Link>

@@ -28,8 +28,25 @@ export const login = async (params: LoginParams) => {
   if (!res.ok) {
     throw new Error("ログインに失敗しました");
   }
-  const data = await res.json();
-  return data;
+  return await res.json();
+};
+
+export const logout = async () => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/logout`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("ログアウトに失敗しました");
+  }
+  return await res.json();
 };
 
 export const getCurrentUser = async () => {
@@ -42,6 +59,10 @@ export const getCurrentUser = async () => {
       credentials: "include",
     }
   );
+
+  if (res.status === 401) {
+    return null;
+  }
 
   if (!res) {
     throw new Error("ユーザー情報の取得に失敗しました");

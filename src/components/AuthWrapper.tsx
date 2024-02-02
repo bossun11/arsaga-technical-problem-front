@@ -19,12 +19,12 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
         if (user) {
           setCurrentUser(user);
           setIsSignedIn(true);
-        } else {
+        } else if (user === null) {
           setCurrentUser(null);
+          setIsSignedIn(false);
         }
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-        setCurrentUser(null);
+      } catch (e) {
+        console.log(e);
       }
       setLoading(false);
     }
