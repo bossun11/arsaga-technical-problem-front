@@ -24,14 +24,14 @@ const AfterLoginMenu = () => {
   return (
     <NavigationMenuList className="gap-3 mr-3">
       <NavigationMenuItem>
-        <Link href="" legacyBehavior passHref>
+        <Link href="/posts" legacyBehavior passHref>
           <NavigationMenuLink className={navigationMenuTriggerStyle()}>
             投稿一覧
           </NavigationMenuLink>
         </Link>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <Link href="" legacyBehavior passHref>
+        <Link href="/posts/new" legacyBehavior passHref>
           <NavigationMenuLink className={navigationMenuTriggerStyle()}>
             投稿する
           </NavigationMenuLink>
