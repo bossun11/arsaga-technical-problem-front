@@ -17,9 +17,12 @@ import { postSchema } from "@/app/utils/validationSchema";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const PostForm = () => {
   const router = useRouter();
+  const [previewImage, setPreviewImage] = useState<string | null>("");
+
   const form = useForm<PostParams>({
     resolver: zodResolver(postSchema),
     defaultValues: {
@@ -32,6 +35,17 @@ const PostForm = () => {
   const onSubmit = async (params: PostParams) => {
     console.log(params);
     router.push("/posts");
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === "string") setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -72,7 +86,7 @@ const PostForm = () => {
             <FormItem>
               <FormLabel>イメージ写真</FormLabel>
               <FormControl>
-                <Input type="file" {...field} />
+                <Input type="file" {...field} onChange={handleImageChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,12 +94,13 @@ const PostForm = () => {
         />
 
         <Image
-          src="/no_image.webp"
+          src={previewImage || "/no_image.webp"}
           alt="No Image"
           width={150}
           height={100}
           className="object-cover"
           priority
+          objectFit="contain"
         />
 
         <div className="flex justify-center">
