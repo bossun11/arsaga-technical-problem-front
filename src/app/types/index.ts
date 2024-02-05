@@ -10,3 +10,20 @@ export type SignUpParams = z.infer<typeof signUpSchema>;
 export type LoginParams = z.infer<typeof loginSchema>;
 
 export type PostParams = z.infer<typeof postSchema>;
+
+export type Post = {
+  id: number;
+  title: string;
+  content: string;
+  image?: string;
+  created_at: string;
+  updated_at: string;
+  user_id: number;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    created_at: string;
+    updated_at: string;
+  };
+};
