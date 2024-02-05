@@ -36,7 +36,7 @@ const LoginForm = () => {
       const user = await getCurrentUser();
       setCurrentUser(user);
       setIsSignedIn(true);
-      // router.push("/posts");
+      router.push("/posts");
     } catch (e) {
       console.log(e);
     }
