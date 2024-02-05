@@ -1,7 +1,23 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
+import { useEffect } from "react";
 
-const page = () => {
+const Page = () => {
+  const getPosts = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts`
+    );
+    const data = await res.json();
+    console.log(data);
+    return data;
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   return (
     <div className=" h-screen p-4">
       <h2 className="text-3xl m-4 text-center">投稿一覧</h2>
@@ -14,6 +30,7 @@ const page = () => {
               height={200}
               alt="投稿画像"
               className="rounded-lg mb-3"
+              priority
             />
             <CardTitle className="text-center">タイトル</CardTitle>
           </CardHeader>
@@ -28,4 +45,4 @@ const page = () => {
     </div>
   );
 };
-export default page;
+export default Page;
