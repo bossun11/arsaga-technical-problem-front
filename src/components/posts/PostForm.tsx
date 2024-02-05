@@ -15,7 +15,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { PostParams } from "@/app/types";
 import { postSchema } from "@/app/utils/validationSchema";
 import { Button } from "../ui/button";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const PostForm = () => {
@@ -31,29 +30,23 @@ const PostForm = () => {
   });
 
   const onSubmit = async (params: PostParams) => {
-    // try {
-    //   const formData = new FormData();
-    //   formData.append("title", params.title);
-    //   formData.append("content", params.content);
-    //   formData.append("image", params.image);
-    //   const res = await fetch(
-    //     `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts`,
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //       body: formData,
-    //       credentials: "include",
-    //     }
-    //   );
-    //   const data = await res.json();
-    //   console.log(data);
-    //   router.push("/posts");
-    // } catch (e) {
-    //   console.log(e);
-    // }
-    console.log(params);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(params),
+          credentials: "include",
+        }
+      );
+      await res.json();
+      router.push("/posts");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -87,7 +80,7 @@ const PostForm = () => {
           )}
         />
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="image"
           render={({ field }) => (
@@ -99,7 +92,7 @@ const PostForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <div className="flex justify-center">
           <Button type="submit">投稿する</Button>
