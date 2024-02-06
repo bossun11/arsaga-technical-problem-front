@@ -2,6 +2,7 @@ import { Post } from "@/app/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 const PostCard = ({ id, title, image, user, created_at }: Post) => {
   return (
@@ -17,9 +18,13 @@ const PostCard = ({ id, title, image, user, created_at }: Post) => {
             priority
           />
           <CardTitle className="text-center">{title}</CardTitle>
+          <div className="flex items-start w-full gap-1 pl-5">
+            <Badge className="bg-deepRed">タグ1</Badge>
+            <Badge className="bg-deepRed">タグ2</Badge>
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="p-5">
+          <div className="pl-5">
             <p>{user.name}</p>
             <p>投稿日 {new Date(created_at).toLocaleDateString()}</p>
           </div>
