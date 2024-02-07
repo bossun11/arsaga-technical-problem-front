@@ -3,16 +3,18 @@
 import PostCard from "@/components/posts/PostCard";
 import { useEffect, useState } from "react";
 import { Post } from "../types";
+import { getAllPosts } from "../api/posts";
 
 const Page = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   const getPosts = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts`
-    );
-    const data = await res.json();
-    setPosts(data.data);
+    try {
+      const res = await getAllPosts();
+      setPosts(res.data);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   useEffect(() => {
