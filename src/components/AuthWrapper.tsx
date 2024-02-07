@@ -30,7 +30,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     }
 
     fetchUser();
-  }, [setCurrentUser, setLoading, setIsSignedIn]);
+  }, []);
 
   return <>{children}</>;
 };

@@ -18,7 +18,7 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { createPost } from "@/app/api/posts";
 
-const PostForm = () => {
+const CreatePostForm = () => {
   const router = useRouter();
 
   const form = useForm<PostParams>({
@@ -93,4 +93,4 @@ const PostForm = () => {
   );
 };
 
-export default PostForm;
+export default CreatePostForm;

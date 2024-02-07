@@ -1,4 +1,4 @@
-import PostForm from "@/components/posts/PostForm";
+import CreatePostForm from "@/components/posts/CreatePostForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const page = () => {
@@ -9,7 +9,7 @@ const page = () => {
           <CardTitle className="text-center">投稿作成</CardTitle>
         </CardHeader>
         <CardContent>
-          <PostForm />
+          <CreatePostForm />
         </CardContent>
       </Card>
     </div>
