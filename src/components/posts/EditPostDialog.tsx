@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { useParams } from "next/navigation";
+import { updatePostById } from "@/app/api/posts";
 
 type EditPostDialogProps = {
   post: Post | null;
@@ -29,17 +31,26 @@ type EditPostDialogProps = {
 
 const EditPostDialog = ({ post, setPost }: EditPostDialogProps) => {
   const [open, setOpen] = useState(false);
+  const { title, content, image } = post || {};
+  const { id } = useParams();
+
   const form = useForm<PostParams>({
     resolver: zodResolver(postSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      image: "",
+      title: title,
+      content: content,
+      image: image,
     },
   });
 
   const onSubmit = async (params: PostParams) => {
-    console.log(params);
+    try {
+      const res = await updatePostById(id.toString(), params);
+      setPost(res);
+    } catch (e) {
+      console.error(e);
+    }
+
     setOpen(false);
   };
 

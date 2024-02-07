@@ -29,6 +29,21 @@ export const createPost = async (params: PostParams) => {
   return await res.json();
 };
 
+export const updatePostById = async (id: string, params: PostParams) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/${id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+      credentials: "include",
+    }
+  );
+  return await res.json();
+};
+
 export const deletePostById = async (id: string) => {
   await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/${id}`, {
     method: "DELETE",
