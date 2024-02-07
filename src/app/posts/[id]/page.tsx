@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Post } from "@/app/types";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { deletePostById, getPostById } from "@/app/api/posts";
 
 const Page = () => {
   const [post, setPost] = useState<Post | null>(null);
@@ -14,11 +15,12 @@ const Page = () => {
   const router = useRouter();
 
   const getPost = useCallback(async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/${id}`
-    );
-    const data = await res.json();
-    setPost(data);
+    try {
+      const res = await getPostById(id.toString());
+      setPost(res);
+    } catch (e) {
+      console.error(e);
+    }
   }, [id]);
 
   useEffect(() => {
@@ -29,13 +31,7 @@ const Page = () => {
     const isConfirm = confirm("本当に削除しますか？");
     if (!isConfirm) return;
     try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/${id}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
+      await deletePostById(id.toString());
       router.push("/posts");
     } catch (e) {
       console.error(e);

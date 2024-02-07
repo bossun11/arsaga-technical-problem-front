@@ -16,6 +16,7 @@ import { PostParams } from "@/app/types";
 import { postSchema } from "@/app/utils/validationSchema";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { createPost } from "@/app/api/posts";
 
 const PostForm = () => {
   const router = useRouter();
@@ -31,18 +32,7 @@ const PostForm = () => {
 
   const onSubmit = async (params: PostParams) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(params),
-          credentials: "include",
-        }
-      );
-      await res.json();
+      await createPost(params);
       router.push("/posts");
     } catch (e) {
       console.log(e);
@@ -80,6 +70,7 @@ const PostForm = () => {
           )}
         />
 
+        {/* ローカルストレージに画像を保存するとCORSエラーが発生するため、一旦コメントアウト */}
         {/* <FormField
           control={form.control}
           name="image"

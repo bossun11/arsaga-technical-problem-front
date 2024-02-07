@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
 const PostCard = ({ id, title, image, user, created_at }: Post) => {
+  const { name } = user;
   return (
     <Link href={`/posts/${id}`}>
       <Card className="shadow-xl rounded-xl mb-5 hover:cursor-pointer">
@@ -25,7 +26,7 @@ const PostCard = ({ id, title, image, user, created_at }: Post) => {
         </CardHeader>
         <CardContent>
           <div className="pl-5">
-            <p>{user.name}</p>
+            <p>{name}</p>
             <p>投稿日 {new Date(created_at).toLocaleDateString()}</p>
           </div>
         </CardContent>
