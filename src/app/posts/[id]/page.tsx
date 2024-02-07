@@ -8,11 +8,14 @@ import { Post } from "@/app/types";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { deletePostById, getPostById } from "@/app/api/posts";
+import EditPostDialog from "@/components/posts/EditPostDialog";
+import { useAuthContext } from "@/app/context/AuthContext";
 
 const Page = () => {
   const [post, setPost] = useState<Post | null>(null);
   const { id } = useParams();
   const router = useRouter();
+  const { currentUser } = useAuthContext();
 
   const getPost = useCallback(async () => {
     try {
@@ -39,7 +42,7 @@ const Page = () => {
   };
 
   if (!post) return null;
-  const { title, content, user, created_at } = post;
+  const { title, content, user, created_at, user_id } = post;
   const { name } = user;
 
   return (
@@ -69,14 +72,17 @@ const Page = () => {
               <p>{name}</p>
               <p>投稿日 {new Date(created_at).toLocaleDateString()}</p>
             </div>
-            <div>
-              <Button
-                className="rounded-xl bg-deepRed hover:bg-rose-700"
-                onClick={deletePost}
-              >
-                削除
-              </Button>
-            </div>
+            {currentUser?.id === user_id && (
+              <div>
+                <EditPostDialog post={post} setPost={setPost} />
+                <Button
+                  className="rounded-xl bg-deepRed hover:bg-rose-700"
+                  onClick={deletePost}
+                >
+                  削除
+                </Button>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
