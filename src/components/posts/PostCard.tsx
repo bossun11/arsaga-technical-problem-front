@@ -19,8 +19,8 @@ const PostCard = ({ id, title, image, user, created_at }: Post) => {
           />
           <CardTitle className="text-center">{title}</CardTitle>
           <div className="flex items-start w-full gap-1 pl-5">
-            <Badge className="bg-deepRed">タグ1</Badge>
-            <Badge className="bg-deepRed">タグ2</Badge>
+            <Badge className="bg-deepRed hover:bg-rose-700">タグ1</Badge>
+            <Badge className="bg-deepRed hover:bg-rose-700">タグ2</Badge>
           </div>
         </CardHeader>
         <CardContent>

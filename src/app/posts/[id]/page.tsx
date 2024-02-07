@@ -5,11 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { Post } from "@/app/types";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const Page = () => {
   const [post, setPost] = useState<Post | null>(null);
   const { id } = useParams();
+  const router = useRouter();
 
   const getPost = useCallback(async () => {
     const res = await fetch(
@@ -23,7 +25,26 @@ const Page = () => {
     getPost();
   }, [getPost]);
 
+  const deletePost = async () => {
+    const isConfirm = confirm("本当に削除しますか？");
+    if (!isConfirm) return;
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+      router.push("/posts");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   if (!post) return null;
+  const { title, content, user, created_at } = post;
+  const { name } = user;
 
   return (
     <div className=" h-screen p-4 flex flex-col items-center">
@@ -37,19 +58,29 @@ const Page = () => {
             className="rounded-lg mb-3"
             priority
           />
-          <CardTitle>{post.title}</CardTitle>
+          <CardTitle>{title}</CardTitle>
           <div className="flex items-start w-full gap-1">
-            <Badge className="bg-deepRed">タグ1</Badge>
-            <Badge className="bg-deepRed">タグ2</Badge>
+            <Badge className="bg-deepRed hover:bg-rose-700">タグ1</Badge>
+            <Badge className="bg-deepRed hover:bg-rose-700">タグ2</Badge>
           </div>
         </CardHeader>
         <CardContent>
           <div className="pl-5">
-            <p>{post.content}</p>
+            <p>{content}</p>
           </div>
-          <div className="p-5">
-            <p>{post.user.name}</p>
-            <p>投稿日 {new Date(post.created_at).toLocaleDateString()}</p>
+          <div className="p-5 flex justify-between">
+            <div>
+              <p>{name}</p>
+              <p>投稿日 {new Date(created_at).toLocaleDateString()}</p>
+            </div>
+            <div>
+              <Button
+                className="rounded-xl bg-deepRed hover:bg-rose-700"
+                onClick={deletePost}
+              >
+                削除
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
