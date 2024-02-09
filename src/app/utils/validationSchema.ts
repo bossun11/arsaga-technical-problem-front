@@ -36,6 +36,13 @@ const image = z
   }, "画像は10MB以下のjpeg, png, webp形式で選択してください。")
   .transform((value) => (value instanceof FileList ? value[0] : value));
 
+const tags = z
+  .string()
+  .max(255, "タグ全体で255文字以下で入力してください。")
+  .refine((data) => data.split(/\s+/).filter(Boolean).length <= 3, {
+    message: "タグは最大3つまでです。",
+  });
+
 export const signUpSchema = z.object({
   name,
   email,
@@ -51,4 +58,5 @@ export const postSchema = z.object({
   title,
   content,
   image,
+  tags,
 });
