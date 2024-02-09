@@ -18,18 +18,18 @@ const Page = () => {
   const router = useRouter();
   const { currentUser } = useAuthContext();
 
-  const getPost = useCallback(async () => {
+  const getPost = async () => {
     try {
       const res = await getPostById(id.toString());
       setPost(res);
     } catch (e) {
       console.error(e);
     }
-  }, [id]);
+  };
 
   useEffect(() => {
     getPost();
-  }, [getPost]);
+  }, [setPost]);
 
   const deletePost = async () => {
     const isConfirm = confirm("本当に削除しますか？");
