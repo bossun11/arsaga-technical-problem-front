@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { deletePostById, getPostById } from "@/app/api/posts";
 import EditPostDialog from "@/components/posts/EditPostDialog";
 import { useAuthContext } from "@/app/context/AuthContext";
+import PostTag from "@/components/posts/PostTag";
 
 const Page = () => {
   const [post, setPost] = useState<Post | null>(null);
@@ -47,7 +48,7 @@ const Page = () => {
 
   return (
     <div className=" h-screen p-4 flex flex-col items-center">
-      <Card className="shadow-xl rounded-xl mb-5 w-1/2 hover:cursor-pointer">
+      <Card className="shadow-xl rounded-xl mb-5 w-1/2">
         <CardHeader className="flex flex-col items-center justify-center">
           <Image
             src={"/no_image.webp"}
@@ -59,8 +60,9 @@ const Page = () => {
           />
           <CardTitle>{title}</CardTitle>
           <div className="flex items-start w-full gap-1">
-            <Badge className="bg-deepRed hover:bg-rose-700">タグ1</Badge>
-            <Badge className="bg-deepRed hover:bg-rose-700">タグ2</Badge>
+            {post.tags.map((tag) => (
+              <PostTag key={tag.id} name={tag.name} />
+            ))}
           </div>
         </CardHeader>
         <CardContent>
