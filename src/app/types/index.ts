@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   loginSchema,
   postSchema,
+  searchPostSchema,
   signUpSchema,
 } from "@/app/utils/validationSchema";
 
@@ -10,6 +11,8 @@ export type SignUpParams = z.infer<typeof signUpSchema>;
 export type LoginParams = z.infer<typeof loginSchema>;
 
 export type PostFormParams = z.infer<typeof postSchema>;
+
+export type SearchPostParams = z.infer<typeof searchPostSchema>;
 
 export type PostApiParams = {
   title: string;

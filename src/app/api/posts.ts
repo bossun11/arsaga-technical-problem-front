@@ -1,4 +1,4 @@
-import { PostApiParams } from "../types";
+import { PostApiParams, SearchPostParams } from "../types";
 
 export const getAllPosts = async () => {
   const res = await fetch(
@@ -50,4 +50,12 @@ export const deletePostById = async (id: string) => {
     credentials: "include",
   });
   return;
+};
+
+export const searchPostsByTag = async (params: SearchPostParams) => {
+  const query = new URLSearchParams(params);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/tags?${query}`
+  );
+  return await res.json();
 };

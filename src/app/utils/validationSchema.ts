@@ -60,3 +60,7 @@ export const postSchema = z.object({
   image,
   tags,
 });
+
+export const searchPostSchema = z.object({
+  tag_name: z.string().max(255, "タグは255文字以下で入力してください。"),
+});
