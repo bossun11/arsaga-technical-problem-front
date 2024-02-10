@@ -39,6 +39,12 @@ const SearchPostField = ({ setPosts }: SearchPostFieldProps) => {
     }
   };
 
+  const handleReset = async () => {
+    form.reset();
+    const res = await getAllPosts();
+    setPosts(res.data);
+  };
+
   return (
     <Form {...form}>
       <form
@@ -58,6 +64,9 @@ const SearchPostField = ({ setPosts }: SearchPostFieldProps) => {
           )}
         />
         <Button type="submit">検索</Button>
+        <Button type="reset" variant="destructive" onClick={handleReset}>
+          リセット
+        </Button>
       </form>
     </Form>
   );
