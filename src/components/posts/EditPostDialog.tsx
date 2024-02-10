@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
-import { Post, PostParams } from "@/app/types";
+import { Post, PostApiParams, PostFormParams } from "@/app/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema } from "@/app/utils/validationSchema";
@@ -31,26 +31,32 @@ type EditPostDialogProps = {
 
 const EditPostDialog = ({ post, setPost }: EditPostDialogProps) => {
   const [open, setOpen] = useState(false);
-  const { title, content, image } = post || {};
+  const { title, content, image, tags } = post || {};
+  const tagsString = tags?.map((tag) => tag.name).join(" ");
   const { id } = useParams();
 
-  const form = useForm<PostParams>({
+  const form = useForm<PostFormParams>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       title: title,
       content: content,
       image: image,
+      tags: tagsString,
     },
   });
 
-  const onSubmit = async (params: PostParams) => {
+  const onSubmit = async (data: PostFormParams) => {
+    const tagsArray = data.tags.split(/\s+/).filter(Boolean);
+    const apiParams: PostApiParams = {
+      ...data,
+      tags: tagsArray,
+    };
     try {
-      const res = await updatePostById(id.toString(), params);
+      const res = await updatePostById(id.toString(), apiParams);
       setPost(res);
     } catch (e) {
       console.error(e);
     }
-
     setOpen(false);
   };
 
@@ -93,6 +99,24 @@ const EditPostDialog = ({ post, setPost }: EditPostDialogProps) => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="tags"
+              render={({ field }) => (
+                <FormItem className="mb-2">
+                  <FormLabel>タグ</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="タグをスペース区切りで入力（最大3つ）"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="flex justify-end gap-3">
               <Button
                 type="button"

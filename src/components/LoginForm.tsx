@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "../app/utils/validationSchema";
 import { LoginParams } from "../app/types";
-import { getCurrentUser, login } from "@/app/api/auth";
+import { login } from "@/app/api/auth";
 import { useAuthContext } from "@/app/context/AuthContext";
 
 const LoginForm = () => {
@@ -32,9 +32,8 @@ const LoginForm = () => {
 
   const onSubmit = async (params: LoginParams) => {
     try {
-      login(params);
-      const user = await getCurrentUser();
-      setCurrentUser(user);
+      const res = await login(params);
+      setCurrentUser(res.user);
       setIsSignedIn(true);
       router.push("/posts");
     } catch (e) {

@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   loginSchema,
   postSchema,
+  searchPostSchema,
   signUpSchema,
 } from "@/app/utils/validationSchema";
 
@@ -9,7 +10,16 @@ export type SignUpParams = z.infer<typeof signUpSchema>;
 
 export type LoginParams = z.infer<typeof loginSchema>;
 
-export type PostParams = z.infer<typeof postSchema>;
+export type PostFormParams = z.infer<typeof postSchema>;
+
+export type SearchPostParams = z.infer<typeof searchPostSchema>;
+
+export type PostApiParams = {
+  title: string;
+  content: string;
+  image?: string;
+  tags?: string[];
+};
 
 export type Post = {
   id: number;
@@ -17,13 +27,12 @@ export type Post = {
   content: string;
   image?: string;
   created_at: string;
-  updated_at: string;
   user_id: number;
   user: {
+    name: string;
+  };
+  tags: {
     id: number;
     name: string;
-    email: string;
-    created_at: string;
-    updated_at: string;
-  };
+  }[];
 };

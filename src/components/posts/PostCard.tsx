@@ -2,9 +2,9 @@ import { Post } from "@/app/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
+import PostTag from "./PostTag";
 
-const PostCard = ({ id, title, image, user, created_at }: Post) => {
+const PostCard = ({ id, title, image, user, created_at, tags }: Post) => {
   const { name } = user;
   return (
     <Link href={`/posts/${id}`}>
@@ -20,8 +20,9 @@ const PostCard = ({ id, title, image, user, created_at }: Post) => {
           />
           <CardTitle className="text-center">{title}</CardTitle>
           <div className="flex items-start w-full gap-1 pl-5">
-            <Badge className="bg-deepRed hover:bg-rose-700">タグ1</Badge>
-            <Badge className="bg-deepRed hover:bg-rose-700">タグ2</Badge>
+            {tags.map((tag) => (
+              <PostTag key={tag.id} {...tag} />
+            ))}
           </div>
         </CardHeader>
         <CardContent>

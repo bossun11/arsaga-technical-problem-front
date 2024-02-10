@@ -1,15 +1,15 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Post } from "@/app/types";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { deletePostById, getPostById } from "@/app/api/posts";
 import EditPostDialog from "@/components/posts/EditPostDialog";
 import { useAuthContext } from "@/app/context/AuthContext";
+import PostTag from "@/components/posts/PostTag";
 
 const Page = () => {
   const [post, setPost] = useState<Post | null>(null);
@@ -17,18 +17,18 @@ const Page = () => {
   const router = useRouter();
   const { currentUser } = useAuthContext();
 
-  const getPost = useCallback(async () => {
+  const getPost = async () => {
     try {
       const res = await getPostById(id.toString());
       setPost(res);
     } catch (e) {
       console.error(e);
     }
-  }, [id]);
+  };
 
   useEffect(() => {
     getPost();
-  }, [getPost]);
+  }, [setPost]);
 
   const deletePost = async () => {
     const isConfirm = confirm("本当に削除しますか？");
@@ -47,7 +47,7 @@ const Page = () => {
 
   return (
     <div className=" h-screen p-4 flex flex-col items-center">
-      <Card className="shadow-xl rounded-xl mb-5 w-1/2 hover:cursor-pointer">
+      <Card className="shadow-xl rounded-xl mb-5 w-1/2">
         <CardHeader className="flex flex-col items-center justify-center">
           <Image
             src={"/no_image.webp"}
@@ -59,8 +59,9 @@ const Page = () => {
           />
           <CardTitle>{title}</CardTitle>
           <div className="flex items-start w-full gap-1">
-            <Badge className="bg-deepRed hover:bg-rose-700">タグ1</Badge>
-            <Badge className="bg-deepRed hover:bg-rose-700">タグ2</Badge>
+            {post.tags.map((tag) => (
+              <PostTag key={tag.id} name={tag.name} />
+            ))}
           </div>
         </CardHeader>
         <CardContent>

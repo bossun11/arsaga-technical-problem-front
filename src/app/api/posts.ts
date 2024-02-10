@@ -1,4 +1,4 @@
-import { PostParams } from "../types";
+import { PostApiParams, SearchPostParams } from "../types";
 
 export const getAllPosts = async () => {
   const res = await fetch(
@@ -14,7 +14,7 @@ export const getPostById = async (id: string) => {
   return await res.json();
 };
 
-export const createPost = async (params: PostParams) => {
+export const createPost = async (params: PostApiParams) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts`,
     {
@@ -29,7 +29,7 @@ export const createPost = async (params: PostParams) => {
   return await res.json();
 };
 
-export const updatePostById = async (id: string, params: PostParams) => {
+export const updatePostById = async (id: string, params: PostApiParams) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/${id}`,
     {
@@ -50,4 +50,12 @@ export const deletePostById = async (id: string) => {
     credentials: "include",
   });
   return;
+};
+
+export const searchPostsByTag = async (params: SearchPostParams) => {
+  const query = new URLSearchParams(params);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/tags?${query}`
+  );
+  return await res.json();
 };

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PostParams } from "@/app/types";
+import { PostApiParams, PostFormParams } from "@/app/types";
 import { postSchema } from "@/app/utils/validationSchema";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
@@ -21,18 +21,24 @@ import { createPost } from "@/app/api/posts";
 const CreatePostForm = () => {
   const router = useRouter();
 
-  const form = useForm<PostParams>({
+  const form = useForm<PostFormParams>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       title: "",
       content: "",
       image: "",
+      tags: "",
     },
   });
 
-  const onSubmit = async (params: PostParams) => {
+  const onSubmit = async (data: PostFormParams) => {
+    const tagsArray = data.tags.split(/\s+/).filter(Boolean);
+    const apiParams: PostApiParams = {
+      ...data,
+      tags: tagsArray,
+    };
     try {
-      await createPost(params);
+      await createPost(apiParams);
       router.push("/posts");
     } catch (e) {
       console.log(e);
@@ -64,6 +70,23 @@ const CreatePostForm = () => {
               <FormLabel>投稿内容</FormLabel>
               <FormControl>
                 <Textarea className="min-h-[160px]" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="tags"
+          render={({ field }) => (
+            <FormItem className="mb-2">
+              <FormLabel>タグ</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="タグをスペース区切りで入力（最大3つ）"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
