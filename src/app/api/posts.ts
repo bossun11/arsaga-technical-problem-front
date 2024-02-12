@@ -26,15 +26,15 @@ export const createPost = async (formData: FormData) => {
   return await res.json();
 };
 
-export const updatePostById = async (id: string, params: PostApiParams) => {
+export const updatePostById = async (id: string, formData: FormData) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts/${id}`,
     {
-      method: "PUT",
+      method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "X-HTTP-Method-Override": "PUT",
       },
-      body: JSON.stringify(params),
+      body: formData,
       credentials: "include",
     }
   );

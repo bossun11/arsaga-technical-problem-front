@@ -104,7 +104,7 @@ const CreatePostForm = () => {
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>イメージ写真</FormLabel>
+              <FormLabel>写真</FormLabel>
               <FormControl>
                 <Input
                   type="file"
