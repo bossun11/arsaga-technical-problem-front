@@ -42,7 +42,7 @@ const Page = () => {
   };
 
   if (!post) return null;
-  const { title, content, user, created_at, user_id } = post;
+  const { title, content, user, created_at, user_id, image } = post;
   const { name } = user;
 
   return (
@@ -50,12 +50,13 @@ const Page = () => {
       <Card className="shadow-xl rounded-xl mb-5 w-1/2">
         <CardHeader className="flex flex-col items-center justify-center">
           <Image
-            src={"/no_image.webp"}
+            src={image || "/no_image.webp"}
             width={300}
             height={200}
             alt="投稿画像"
             className="rounded-lg mb-3"
             priority
+            objectFit="fit"
           />
           <CardTitle>{title}</CardTitle>
           <div className="flex items-start w-full gap-1">

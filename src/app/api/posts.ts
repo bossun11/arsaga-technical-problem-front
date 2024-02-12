@@ -14,15 +14,12 @@ export const getPostById = async (id: string) => {
   return await res.json();
 };
 
-export const createPost = async (params: PostApiParams) => {
+export const createPost = async (formData: FormData) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/posts`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(params),
+      body: formData,
       credentials: "include",
     }
   );

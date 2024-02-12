@@ -17,6 +17,7 @@ const PostCard = ({ id, title, image, user, created_at, tags }: Post) => {
             alt="投稿画像"
             className="rounded-lg mb-3"
             priority
+            objectFit="fit"
           />
           <CardTitle className="text-center">{title}</CardTitle>
           <div className="flex items-start w-full gap-1 pl-5">
