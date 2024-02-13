@@ -10,6 +10,7 @@ import { deletePostById, getPostById } from "@/app/api/posts";
 import EditPostDialog from "@/components/posts/EditPostDialog";
 import { useAuthContext } from "@/app/context/AuthContext";
 import PostTag from "@/components/posts/PostTag";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [post, setPost] = useState<Post | null>(null);
@@ -36,8 +37,9 @@ const Page = () => {
     try {
       await deletePostById(id.toString());
       router.push("/posts");
+      toast.success("投稿を削除しました");
     } catch (e) {
-      console.error(e);
+      toast.error("投稿の削除に失敗しました");
     }
   };
 
