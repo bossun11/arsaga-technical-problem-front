@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 const AfterLoginMenu = () => {
   const { setIsSignedIn, setCurrentUser } = useAuthContext();
@@ -16,8 +17,9 @@ const AfterLoginMenu = () => {
       await logout();
       setIsSignedIn(false);
       setCurrentUser(null);
+      toast.success("ログアウトしました");
     } catch (e) {
-      console.log(e);
+      toast.error("ログアウトに失敗しました");
     }
   };
 
@@ -38,7 +40,7 @@ const AfterLoginMenu = () => {
         </Link>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <Link href="/signup" legacyBehavior passHref>
+        <Link href="/login" legacyBehavior passHref>
           <NavigationMenuLink
             className={navigationMenuTriggerStyle()}
             onClick={handleLogout}

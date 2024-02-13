@@ -15,6 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "react-toastify";
+import { signUp } from "@/app/api/auth";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -30,20 +32,11 @@ const SignUpForm = () => {
 
   const onSubmit = async (params: SignUpParams) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/register`,
-        {
-          method: "POST",
-          body: JSON.stringify(params),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await res.json();
+      await signUp(params);
       router.push("/login");
+      toast.success("ユーザー登録が完了しました");
     } catch (e) {
-      console.log(e);
+      toast.error("ユーザー登録に失敗しました");
     }
   };
 

@@ -17,6 +17,7 @@ import { postSchema } from "@/app/utils/validationSchema";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { createPost } from "@/app/api/posts";
+import { toast } from "react-toastify";
 
 const CreatePostForm = () => {
   const router = useRouter();
@@ -46,8 +47,9 @@ const CreatePostForm = () => {
     try {
       await createPost(formData);
       router.push("/posts");
+      toast.success("投稿しました");
     } catch (e) {
-      console.log(e);
+      toast.error("投稿に失敗しました");
     }
   };
 

@@ -10,15 +10,17 @@ const PostCard = ({ id, title, image, user, created_at, tags }: Post) => {
     <Link href={`/posts/${id}`}>
       <Card className="shadow-xl rounded-xl mb-5 hover:cursor-pointer">
         <CardHeader className="flex flex-col items-center justify-center">
-          <Image
-            src={image || "/no_image.webp"}
-            width={300}
-            height={200}
-            alt="投稿画像"
-            className="rounded-lg mb-3"
-            priority
-            objectFit="fit"
-          />
+          <div className="w-[300px] h-[200px] relative mb-3">
+            <Image
+              src={image || "/no_image.webp"}
+              fill={true}
+              alt="投稿画像"
+              className="rounded-lg"
+              priority
+              sizes="50vw"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
           <CardTitle className="text-center">{title}</CardTitle>
           <div className="flex items-start w-full gap-1 pl-5">
             {tags.map((tag) => (

@@ -23,6 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { updatePostById } from "@/app/api/posts";
+import { toast } from "react-toastify";
 
 type EditPostDialogProps = {
   post: Post | null;
@@ -40,7 +41,7 @@ const EditPostDialog = ({ post, setPost }: EditPostDialogProps) => {
     defaultValues: {
       title: title,
       content: content,
-      image: image,
+      image: "",
       tags: tagsString,
     },
   });
@@ -60,8 +61,9 @@ const EditPostDialog = ({ post, setPost }: EditPostDialogProps) => {
     try {
       const res = await updatePostById(id.toString(), formData);
       setPost(res);
+      toast.success("投稿を更新しました");
     } catch (e) {
-      console.error(e);
+      toast.error("投稿の更新に失敗しました");
     }
     setOpen(false);
   };

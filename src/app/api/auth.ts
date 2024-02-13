@@ -1,4 +1,4 @@
-import { LoginParams } from "../types";
+import { LoginParams, SignUpParams } from "../types";
 
 // CSRFトークンを取得する関数を追加
 export const getCsrfCookie = async () => {
@@ -9,6 +9,20 @@ export const getCsrfCookie = async () => {
       credentials: "include",
     }
   );
+};
+
+export const signUp = async (params: SignUpParams) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/register`,
+    {
+      method: "POST",
+      body: JSON.stringify(params),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return await res.json();
 };
 
 export const login = async (params: LoginParams) => {
