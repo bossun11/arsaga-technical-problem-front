@@ -17,6 +17,7 @@ import { loginSchema } from "../app/utils/validationSchema";
 import { LoginParams } from "../app/types";
 import { login } from "@/app/api/auth";
 import { useAuthContext } from "@/app/context/AuthContext";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -36,8 +37,9 @@ const LoginForm = () => {
       setCurrentUser(res.user);
       setIsSignedIn(true);
       router.push("/posts");
+      toast.success("ログインしました");
     } catch (e) {
-      console.log(e);
+      toast.error("ログインに失敗しました");
     }
   };
 
