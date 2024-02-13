@@ -41,7 +41,7 @@ const EditPostDialog = ({ post, setPost }: EditPostDialogProps) => {
     defaultValues: {
       title: title,
       content: content,
-      image: image,
+      image: "",
       tags: tagsString,
     },
   });
