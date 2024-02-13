@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
-import { Post, PostApiParams, PostFormParams } from "@/app/types";
+import { Post, PostFormParams } from "@/app/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema } from "@/app/utils/validationSchema";
@@ -47,12 +47,18 @@ const EditPostDialog = ({ post, setPost }: EditPostDialogProps) => {
 
   const onSubmit = async (data: PostFormParams) => {
     const tagsArray = data.tags.split(/\s+/).filter(Boolean);
-    const apiParams: PostApiParams = {
-      ...data,
-      tags: tagsArray,
-    };
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    tagsArray.forEach((tag) => {
+      formData.append("tags[]", tag);
+    });
+    if (data.image) {
+      formData.append("image", data.image);
+    }
+
     try {
-      const res = await updatePostById(id.toString(), apiParams);
+      const res = await updatePostById(id.toString(), formData);
       setPost(res);
     } catch (e) {
       console.error(e);
@@ -110,6 +116,28 @@ const EditPostDialog = ({ post, setPost }: EditPostDialogProps) => {
                     <Input
                       {...field}
                       placeholder="タグをスペース区切りで入力（最大3つ）"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>写真</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={(e) => {
+                        const files = e.target.files;
+                        field.onChange(files ? files[0] : null);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />

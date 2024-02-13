@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PostApiParams, PostFormParams } from "@/app/types";
+import { PostFormParams } from "@/app/types";
 import { postSchema } from "@/app/utils/validationSchema";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
@@ -33,12 +33,18 @@ const CreatePostForm = () => {
 
   const onSubmit = async (data: PostFormParams) => {
     const tagsArray = data.tags.split(/\s+/).filter(Boolean);
-    const apiParams: PostApiParams = {
-      ...data,
-      tags: tagsArray,
-    };
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    tagsArray.forEach((tag) => {
+      formData.append("tags[]", tag);
+    });
+    if (data.image) {
+      formData.append("image", data.image);
+    }
+
     try {
-      await createPost(apiParams);
+      await createPost(formData);
       router.push("/posts");
     } catch (e) {
       console.log(e);
@@ -93,20 +99,27 @@ const CreatePostForm = () => {
           )}
         />
 
-        {/* ローカルストレージに画像を保存するとCORSエラーが発生するため、一旦コメントアウト */}
-        {/* <FormField
+        <FormField
           control={form.control}
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>イメージ写真</FormLabel>
+              <FormLabel>写真</FormLabel>
               <FormControl>
-                <Input type="file" {...field} />
+                <Input
+                  type="file"
+                  name={field.name}
+                  onBlur={field.onBlur}
+                  onChange={(e) => {
+                    const files = e.target.files;
+                    field.onChange(files ? files[0] : null);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
 
         <div className="flex justify-center">
           <Button type="submit">投稿する</Button>
