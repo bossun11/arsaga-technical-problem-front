@@ -51,15 +51,17 @@ const Page = () => {
     <div className=" h-screen p-4 flex flex-col items-center">
       <Card className="shadow-xl rounded-xl mb-5 w-1/2">
         <CardHeader className="flex flex-col items-center justify-center">
-          <Image
-            src={image || "/no_image.webp"}
-            width={300}
-            height={200}
-            alt="投稿画像"
-            className="rounded-lg mb-3"
-            priority
-            objectFit="fit"
-          />
+          <div className="w-[600px] h-[400px] relative mb-3">
+            <Image
+              src={image || "/no_image.webp"}
+              fill={true}
+              alt="投稿画像"
+              className="rounded-lg"
+              priority
+              sizes="100vw"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
           <CardTitle>{title}</CardTitle>
           <div className="flex items-start w-full gap-1">
             {post.tags.map((tag) => (
