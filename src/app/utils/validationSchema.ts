@@ -30,10 +30,10 @@ const image = z
     if (!(value instanceof FileList)) return true;
     const file = value[0];
     if (!file) return true;
-    if (file.size > 10000000) return false;
+    if (file.size > 5000000) return false;
     if (!IMAGE_TYPES.includes(file.type)) return false;
     return true;
-  }, "画像は10MB以下のjpeg, png, webp形式で選択してください。")
+  }, "画像は5MB以下のjpeg, png, webp形式で選択してください。")
   .transform((value) => (value instanceof FileList ? value[0] : value));
 
 const tags = z
